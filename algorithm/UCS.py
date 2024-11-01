@@ -309,8 +309,14 @@ class UniformCostSearch:
 
 
 def main():
+    input_filename = 'input.txt'
+    output_filename = 'UCS_output.txt'
+    if len(sys.argv) >= 2:
+        input_filename = sys.argv[1]
+    if len(sys.argv) >= 3:
+        output_filename = sys.argv[2]
     datruong = UniformCostSearch(
-        "algorithm\\input.txt", "algorithm\\UCS_output.txt")
+        input_filename, output_filename)
     datruong.solve()
 
 
