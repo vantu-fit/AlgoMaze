@@ -265,6 +265,21 @@ class UniformCostSearch:
         grid_lines = lines[1:]
         self.stone_weights = [int(w) for w in weights_line.strip().split()]
         self.game_grid = [line.rstrip('\n') for line in grid_lines]
+        for i in range(len(self.game_grid)):
+            for j in range(len(self.game_grid[i])):
+                if self.game_grid[i][j] == '#':
+                    break
+                if self.game_grid[i][j] == ' ':
+                    self.game_grid[i] = self.game_grid[i][:j] + \
+                        '#' + self.game_grid[i][j+1:]
+
+        for i in range(len(self.game_grid)):
+            for j in range(len(self.game_grid[i])-1, -1, -1):
+                if self.game_grid[i][j] == '#':
+                    break
+                if self.game_grid[i][j] == ' ':
+                    self.game_grid[i] = self.game_grid[i][:j] + \
+                        '#' + self.game_grid[i][j+1:]
         return self.stone_weights, self.game_grid
 
     def write_solution_output(self, algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution, filename=None):
@@ -309,12 +324,12 @@ class UniformCostSearch:
 
 
 def main():
-    input_filename = 'input.txt'
-    output_filename = 'UCS_output.txt'
-    if len(sys.argv) >= 2:
-        input_filename = sys.argv[1]
-    if len(sys.argv) >= 3:
-        output_filename = sys.argv[2]
+    input_filename = 'algorithm\\input_02.txt'
+    output_filename = 'algorithm\\UCS_output_02.txt'
+    # if len(sys.argv) >= 2:
+    #     input_filename = sys.argv[1]
+    # if len(sys.argv) >= 3:
+    #     output_filename = sys.argv[2]
     datruong = UniformCostSearch(
         input_filename, output_filename)
     datruong.solve()
