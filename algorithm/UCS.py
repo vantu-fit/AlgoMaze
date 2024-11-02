@@ -324,8 +324,8 @@ class UniformCostSearch:
 
 
 def main():
-    input_filename = 'algorithm\\input_02.txt'
-    output_filename = 'algorithm\\UCS_output_02.txt'
+    input_filename = 'algorithm\\input.txt'
+    output_filename = 'algorithm\\UCS_output.txt'
     # if len(sys.argv) >= 2:
     #     input_filename = sys.argv[1]
     # if len(sys.argv) >= 3:
