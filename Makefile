@@ -3,3 +3,9 @@ test a*:
 
 test ucs:
 	python algorithm/UCS.py algorithm/input.txt algorithm/UCS_output.txt
+
+test bfs:
+	python algorithm/DFS_BFS.py algorithm/input.txt algorithm/BFS_output.txt BFS
+
+test dfs:
+	python algorithm/DFS_BFS.py algorithm/input.txt algorithm/DFS_output.txt DFS
