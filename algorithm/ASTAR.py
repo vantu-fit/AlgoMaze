@@ -4,6 +4,8 @@ import heapq
 import psutil
 import os
 import json
+from datetime import datetime
+import numpy as np
 
 class SokobanSolver:
     def __init__(self, weights, grid):
@@ -68,11 +70,11 @@ class SokobanSolver:
             f.write(f"{solution}\n")
 
     def heuristic(self, state):
-        # Use sum of Manhattan distances from stones to nearest switches
+        # Use sum of Manhattan distances from stones to nearest switches * weight of stone
         stones = state['stones']
         total = 0
         for stone_pos in stones.keys():
-            min_dist = min(abs(stone_pos[0] - s[0]) + abs(stone_pos[1] - s[1]) for s in self.switches)
+            min_dist = min((abs(stone_pos[0] - s[0])**2 + abs(stone_pos[1] - s[1])) * stones[stone_pos] for s in self.switches)
             total += min_dist
         return total
 
@@ -184,20 +186,48 @@ def read_input(filename):
     return weights, grid
 
 if __name__ == "__main__":
-    input_filename = 'input.txt'
-    output_filename = 'ASTART_output.txt'
-    if len(sys.argv) >= 2:
-        input_filename = sys.argv[1]
-    if len(sys.argv) >= 3:
-        output_filename = sys.argv[2]
+    # input_filename = 'input.txt'
+    # output_filename = 'ASTART_output.txt'
+    # if len(sys.argv) >= 2:
+    #     input_filename = sys.argv[1]
+    # if len(sys.argv) >= 3:
+    #     output_filename = sys.argv[2]
 
-    weights, grid = read_input(input_filename)
-    solver = SokobanSolver(weights, grid)
-    result = solver.solve()
-    if result:
-        steps, total_weight, nodes_generated, time_taken, memory_used, solution = result
-        algorithm_name = "A*"
-        solver.write_output(output_filename, algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution)
-    else:
-        with open(output_filename, 'w') as f:
-            f.write("No solution found.\n")
+    # weights, grid = read_input(input_filename)
+    # solver = SokobanSolver(weights, grid)
+    # result = solver.solve()
+    # if result:
+    #     steps, total_weight, nodes_generated, time_taken, memory_used, solution = result
+    #     algorithm_name = "A*"
+    #     solver.write_output(output_filename, algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution)
+    # else:
+    #     with open(output_filename, 'w') as f:
+    #         f.write("No solution found.\n")
+
+    input_dir = 'maze'
+    # output_dir = f'algorithm/logs/output_{datetime.now().strftime("%Y%m%d%H%M%S")}'
+    output_dir = 'output/a_star'
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    start_time = time.time()
+    for input_filename in os.listdir(input_dir):
+        print(f"Solving {input_filename}...")
+        output_filename = os.path.join(output_dir, input_filename.replace('input_', 'output_'))
+        input_filename = os.path.join(input_dir, input_filename)
+        weights, grid = read_input(input_filename)
+        solver = SokobanSolver(weights, grid)
+        result = solver.solve()
+        if result:
+            steps, total_weight, nodes_generated, time_taken, memory_used, solution = result
+            algorithm_name = "A*"
+            solver.write_output(output_filename, algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution)
+        else:
+            with open(output_filename, 'w') as f:
+                f.write("No solution found.\n")
+    end_time = time.time()
+    print(f"Total time taken: {end_time - start_time:.2f}s")
+
+    print("Done!")
+
