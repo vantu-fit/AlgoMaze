@@ -68,7 +68,6 @@ class Object:
     def movee(self,changeX,changeY):
         # print(2)
         i=0.1
-        
         while i <=1:
             clock.tick(48)
             self.vx+=changeX*0.1
@@ -111,7 +110,7 @@ class Key(Object):
         height=self.vy*TILE_Y
         # Calculate the position to place the text at the center of the screen
         text_x = ((TILE_X - text_rect.width) // 2 + width + menu_bar_width)*1.01
-        text_y = (TILE_Y - text_rect.height) // 2 +height*0.94
+        text_y = (TILE_Y - text_rect.height) // 2 +height-8*TILE_Y/32
         org_draw(self.number,text_x,text_y)
         # draw(self.number,self.vx,self.vy,1)
 
@@ -183,6 +182,7 @@ class Me(Object):
         super().__init__(name,x,y,leftS)
         self.left=1
     def check_move(self, changeX, changeY):
+        global stat_weight
         xx,yy=int(self.x+changeX),int(self.y+changeY)
         if not Object.check_boundary(xx,yy):
             return 0
@@ -194,6 +194,7 @@ class Me(Object):
             j=Key.findd(xx,yy)
             # print(j)   
             if keys[j].check_move(changeX,changeY):
+                stat_weight+=keys[j].weight
                 keys[j].upd_pos(changeX,changeY)
             else:
                 return 0
@@ -238,13 +239,23 @@ def load_maze(filename):
         
     return maze
 
+
+def update_stats(): #update steps and weight
+    global steps,stat_weight
+    statfont=pygame.font.Font('./font/Audiowide-Regular.ttf',20)
+    text_steps=statfont.render(f"Steps: {steps}",True,'Orange')
+    text_weight=statfont.render(f"Total weight: {stat_weight}",True,'Orange')
+    # print(123)
+    org_draw(text_steps,50,500)
+    org_draw(text_weight,50,530)
+
 def update_size():
     global TILE_X,TILE_Y,screen_height,screen_width,screen_height,menu_bar_height,menu_bar_width,screen
     TILE_X= int(400/maze_width)
     TILE_Y= int(400/maze_height)
     game_width=TILE_X*maze_width
     game_height=TILE_Y*maze_height
-    menu_bar_height=500
+    menu_bar_height=600
     menu_bar_width=200
     screen_width=game_width+menu_bar_width
     screen_height=menu_bar_height
@@ -266,11 +277,11 @@ def draw_update_maze(screen,maze):
                 if (render_maze[y][x] is None):
                     # print(123)
                     if (a==0):
-                        render_maze[y][x]=RockSprite
-                    elif (a==1):
-                        render_maze[y][x]=RockSprite1
-                    else:
                         render_maze[y][x]=RockSprite2
+                    elif (a==1):
+                        render_maze[y][x]=RockSprite2
+                    else:
+                        render_maze[y][x]=RockSprite
    
                 render_maze[y][x].animate(x,y)
             elif tile==".":
@@ -367,7 +378,10 @@ def print_maze(maze):
 def update_object(changeX,changeY):
     me.upd_pos(changeX,changeY)
 
+
 start,level,mode=0,0,0
+start_time = 0
+elapsed_time = 0
 
 output=dict()
 def readOutput():
@@ -383,19 +397,49 @@ def readOutput():
         for i in range(0,len(lines),3):
             output[lines[i]].append(lines[i+2].lower())
 
+def reset_stopwatch():
+    global start_time, elapsed_time
+    print(123)
+    start_time = pygame.time.get_ticks()
+    # elapsed_time = 0
+
+def startTimer():
+    # if start==0: return
+    global elapsed_time
+    statfont=pygame.font.Font('./font/Audiowide-Regular.ttf',20)
+    if start:
+        elapsed_time = pygame.time.get_ticks() - start_time
+    # Convert milliseconds to minutes, seconds, and milliseconds
+    minutes = int(elapsed_time / 60000)
+    seconds = int((elapsed_time % 60000) / 1000)
+    milliseconds = int((elapsed_time % 1000)/10)
+
+    # Render text
+    time_str = f"Time: {minutes:02}:{seconds:02}:{milliseconds:02}"
+    # text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    text=statfont.render(time_str,True,'Orange')
+    # screen.blit(text, text_rect)
+    org_draw(text,50,560)
+    
+stat_weight,steps=0,0
 def runMaze():
-    global output,me
+    global output,me,steps,stat_weight
     res=output[algos[mode]][level]
+    steps=0
     print(res)
-    for c in res:
+    for i,c in enumerate(res):
         d=None
-        print(c)
+        # print(c)
+        steps=i
+        stat_weight+=1
         if c=='u': d=3
         if c=='r': d=0
         if c=='l': d=1
         if c=='d': d=2
         update_object(dx[d],dy[d])
+        # update_stats(i,stat_weight)
         clock.tick(3)
+        
     checkStart((StartButton.x_pos,StartButton.y_pos))
 
 def checkStart(pos):
@@ -405,6 +449,7 @@ def checkStart(pos):
     start=1-start
     if (start==1):
         # print(start)
+        reset_stopwatch()
         thread= threading.Thread(target=runMaze)
         thread.start()
  
@@ -433,7 +478,6 @@ def check_buttons(buttons,pos):
             k=i
             break
     if k!= None:
-        print(k)
         for i in range(len(buttons)):
             if i!=k:
                 buttons[i].resetSelection()
@@ -442,13 +486,13 @@ def check_buttons(buttons,pos):
             resetMaze()
         else:
             mode=k
-            print(mode)
 
 # Set up the screen dimensions
 screen_width = 800
 screen_height = 500
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Blind search")
+
 
 # Create the menu bar surface
 menu_bar_width = 200
@@ -464,12 +508,13 @@ import os
 
 def main(filename):
     global screen,static_maze,A_screen,maze_width,maze_height,game_height,game_width,render_maze,start,org_mazes
+    global start,start_time,elapsed_time
     # Initialize pygame
     global active_maze
     # pygame.init()
     
     # Load maze
-    org_mazes=[load_maze('./maze/'+filename) for filename in os.listdir('./map')]
+    org_mazes=[load_maze('./maze/'+filename) for filename in os.listdir('./maze')]
     resetMaze()
     # Set up display
     readOutput()
@@ -499,23 +544,19 @@ def main(filename):
                     changeY+=1
                 if event.key== pygame.K_UP:
                     changeY-=1
-                if event.key in [pygame.K_0, pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4, pygame.K_5, pygame.K_6, pygame.K_7, pygame.K_8, pygame.K_9]:
-                # Get the number pressed
-                    number_pressed = int(pygame.key.name(event.key))
-                    # print(number_pressed)
-                    thread=threading.Thread(target=lambda:Key.get_trace(number_pressed))
-                    thread.start()
-                    # Rock.get_trace(number_pressed)
+                    # startTimer()
+                    # update_stats()
         # update_size()
         screen.fill((25, 25, 25))
         update_object(changeX,changeY)
         # Draw the maze
         active_maze=draw_update_maze(screen, static_maze)
-        # Key.checkopen()
-        #UI
-        # screen.blit(menu_bar_surface, (0, 0))
-        
-        # Update the display
+
+        #Update stats
+        update_stats()
+        startTimer()
+
+        # Update the display UI
         draw_update_UI(MOUSE_POS)
         pygame.display.flip()
         clock.tick(FPS)
