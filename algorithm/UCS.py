@@ -280,6 +280,7 @@ class UniformCostSearch:
                 if self.game_grid[i][j] == ' ':
                     self.game_grid[i] = self.game_grid[i][:j] + \
                         '#' + self.game_grid[i][j+1:]
+        print(self.game_grid)
         return self.stone_weights, self.game_grid
 
     def write_solution_output(self, algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution, filename=None):
@@ -324,15 +325,17 @@ class UniformCostSearch:
 
 
 def main():
-    input_filename = 'algorithm\\input.txt'
-    output_filename = 'algorithm\\UCS_output.txt'
-    # if len(sys.argv) >= 2:
-    #     input_filename = sys.argv[1]
-    # if len(sys.argv) >= 3:
-    #     output_filename = sys.argv[2]
-    datruong = UniformCostSearch(
-        input_filename, output_filename)
-    datruong.solve()
+    # input_filename = 'maze\\input-10.txt'
+    # output_filename = 'ucs\\output-10.txt'
+    if len(sys.argv) >= 2:
+        input_filename = sys.argv[1]
+    if len(sys.argv) >= 3:
+        output_filename = sys.argv[2]
+    for i in range(1, 11):
+        input_filename = f'maze\\input-{i}.txt'
+        output_filename = f'ucs\\output-{i}.txt'
+        solver = UniformCostSearch(input_filename, output_filename)
+        solver.solve()
 
 
 if __name__ == "__main__":
