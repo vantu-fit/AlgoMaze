@@ -265,6 +265,27 @@ class UniformCostSearch:
         grid_lines = lines[1:]
         self.stone_weights = [int(w) for w in weights_line.strip().split()]
         self.game_grid = [line.rstrip('\n') for line in grid_lines]
+        for i in range(len(self.game_grid)):
+            for j in range(len(self.game_grid[i])):
+                if self.game_grid[i][j] == '#':
+                    break
+                if self.game_grid[i][j] == ' ':
+                    self.game_grid[i] = self.game_grid[i][:j] + \
+                        '#' + self.game_grid[i][j+1:]
+
+        for i in range(len(self.game_grid)):
+            for j in range(len(self.game_grid[i])-1, -1, -1):
+                if self.game_grid[i][j] == '#':
+                    break
+                if self.game_grid[i][j] == ' ':
+                    self.game_grid[i] = self.game_grid[i][:j] + \
+                        '#' + self.game_grid[i][j+1:]
+        # fill ' ' at the end to max length
+        max_length = max([len(row) for row in self.game_grid])
+        for i in range(len(self.game_grid)):
+            self.game_grid[i] = self.game_grid[i] + '#' * \
+                (max_length - len(self.game_grid[i]))
+        print(self.game_grid)
         return self.stone_weights, self.game_grid
 
     def write_solution_output(self, algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution, filename=None):
@@ -309,15 +330,19 @@ class UniformCostSearch:
 
 
 def main():
-    input_filename = 'input.txt'
-    output_filename = 'UCS_output.txt'
+    # input_filename = 'maze\\input-06.txt'
+    # output_filename = 'ucs\\output-06.txt'
+    # solver = UniformCostSearch(input_filename, output_filename)
+    # solver.solve()
     if len(sys.argv) >= 2:
         input_filename = sys.argv[1]
     if len(sys.argv) >= 3:
         output_filename = sys.argv[2]
-    datruong = UniformCostSearch(
-        input_filename, output_filename)
-    datruong.solve()
+    for i in range(1, 10):
+        input_filename = f'map\\input-0{i}.txt'
+        output_filename = f'ucs\\output-0{i}.txt'
+        solver = UniformCostSearch(input_filename, output_filename)
+        solver.solve()
 
 
 if __name__ == "__main__":

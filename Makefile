@@ -1,5 +1,5 @@
-test a*:
-	python algorithm/ASTAR.py algorithm/input.txt algorithm/ASTAR_output.txt
+a*:
+	python algorithm/ASTAR.py maze/input-01.txt algorithm/a_start_output/output-01.txt
 
 test ucs:
 	python algorithm/UCS.py algorithm/input.txt algorithm/UCS_output.txt
