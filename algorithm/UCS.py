@@ -330,40 +330,24 @@ class UniformCostSearch:
 
 
 def main():
-<<<<<<< HEAD
-    input_filename = 'maze\\input-01.txt'
-    output_filename = 'ucs\\output-01.txt'
-    solver = UniformCostSearch(input_filename, output_filename)
-    solver.solve()
-    # if len(sys.argv) >= 2:
-    #     input_filename = sys.argv[1]
-    # if len(sys.argv) >= 3:
-    #     output_filename = sys.argv[2]
-    # for i in range(1, 10):
-    #     input_filename = f'map\\input-0{i}.txt'
-    #     output_filename = f'ucs\\output-0{i}.txt'
-    #     solver = UniformCostSearch(input_filename, output_filename)
-    #     solver.solve()
-
-
-=======
     # input_filename = 'maze\\input-06.txt'
     # output_filename = 'ucs\\output-06.txt'
     # solver = UniformCostSearch(input_filename, output_filename)
     # solver.solve()
-    if len(sys.argv) >= 2:
-        input_filename = sys.argv[1]
-    if len(sys.argv) >= 3:
-        output_filename = sys.argv[2]
-    # for i in range(1, 10):
-    #     input_filename = f'maze\\input-0{i}.txt'
-    #     output_filename = f'new_ucs\\output-0{i}.txt'
-    #     solver = UniformCostSearch(input_filename, output_filename)
-    #     solver.solve()
-    input_filename = 'maze\\input-10.txt'
-    output_filename = 'new_ucs\\output-10.txt'
-    solver = UniformCostSearch(input_filename, output_filename)
-    solver.solve()
->>>>>>> 23c07bfd40bd2ff8f46cff556dc12d33ee5a3052
+    # if len(sys.argv) >= 2:
+    #     input_filename = sys.argv[1]
+    # if len(sys.argv) >= 3:
+    #     output_filename = sys.argv[2]
+    for i in range(1, 10):
+        input_filename = f'maze\\input-0{i}.txt'
+        output_filename = f'output\\ucs\\output-0{i}.txt'
+        solver = UniformCostSearch(input_filename, output_filename)
+        solver.solve()
+    # input_filename = 'maze\\input-10.txt'
+    # output_filename = 'new_ucs\\output-10.txt'
+    # solver = UniformCostSearch(input_filename, output_filename)
+    # solver.solve()
+
+
 if __name__ == "__main__":
     main()
