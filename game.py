@@ -38,6 +38,7 @@ class Sprite:
         self.curSprite+=1
         draw(self.sprites[int(self.curSprite)%len(self.sprites)],x,y,1)
 
+import queue
 class Object:
     def __init__(self,name,x,y,sprites):
         self.name=name
@@ -48,6 +49,7 @@ class Object:
         # self.runs=runs
         self.move=0
         self.sprites=sprites
+        self.queue=queue.Queue()
 
     @staticmethod
     def check_move(x,y): #depend on object
@@ -77,10 +79,14 @@ class Object:
         
     def upd_pos(self,changeX,changeY):
         # print(self.x,self.y)
-        if changeX+changeY!=0 and self.check_move(changeX,changeY) and self.move==0:
-            self.move=1
+        if changeX+changeY!=0 and self.check_move(changeX,changeY) and self.move==0 :
+            # self.move=1
+            self.queue.put((changeX,changeY))
             self.x+=changeX
             self.y+=changeY
+        if not self.queue.empty():
+            # self.movee(self.queue.get())
+            changeX,changeY=self.queue.get()
             thread=threading.Thread(target=lambda:self.movee(changeX,changeY))
             thread.start()
     
@@ -245,7 +251,6 @@ def update_stats(): #update steps and weight
     statfont=pygame.font.Font('./font/Audiowide-Regular.ttf',20)
     text_steps=statfont.render(f"Steps: {steps}",True,'Orange')
     text_weight=statfont.render(f"Total weight: {stat_weight}",True,'Orange')
-    # print(123)
     org_draw(text_steps,50,500)
     org_draw(text_weight,50,530)
 
@@ -349,7 +354,7 @@ def clear_maze(maze):
         for x, tile in enumerate(row):
             if tile=="@" or tile=='$':
                 tile=" "
-            if tile=='+':
+            if tile=='+' or tile=='*':
                 tile='.'
             n_maze[y].append(tile)
     return n_maze
@@ -361,7 +366,7 @@ def get_object(maze):
     weights=weightss[level]
     for y, row in enumerate(maze):
         for x, tile in enumerate(row):
-            if (tile=='$'):
+            if (tile=='$' or tile =='*'):
                 key=Key(tile,x,y,KeySprite,weights[i])
                 i+=1
                 keys.append(key)
@@ -399,7 +404,7 @@ def readOutput():
 
 def reset_stopwatch():
     global start_time, elapsed_time
-    print(123)
+    # print(123)
     start_time = pygame.time.get_ticks()
     # elapsed_time = 0
 
@@ -426,8 +431,10 @@ def runMaze():
     global output,me,steps,stat_weight
     res=output[algos[mode]][level]
     steps=0
-    print(res)
+    # print(res)
     for i,c in enumerate(res):
+        if (start==0):
+            return
         d=None
         # print(c)
         steps=i
@@ -445,11 +452,12 @@ def runMaze():
 def checkStart(pos):
     global start
     # print(output)
-    if not StartButton.checkForInput(pos):return
+    if not StartButton.checkForInput(pos): return
     start=1-start
     if (start==1):
         # print(start)
         reset_stopwatch()
+        resetMaze()
         thread= threading.Thread(target=runMaze)
         thread.start()
  
@@ -470,6 +478,7 @@ def resetMaze():
     get_object(active_maze)
 
 def check_buttons(buttons,pos):
+    # global start
     k=None
     global level,mode,org_mazes,active_maze,static_maze
     for i in range(len(buttons)):
@@ -478,6 +487,8 @@ def check_buttons(buttons,pos):
             k=i
             break
     if k!= None:
+        # start=0
+        # checkStart((StartButton.x_pos,StartButton.y_pos))
         for i in range(len(buttons)):
             if i!=k:
                 buttons[i].resetSelection()
@@ -535,7 +546,7 @@ def main(filename):
                 checkStart(MOUSE_POS) 
             if event.type == pygame.QUIT:
                 running = False
-            if event.type== pygame.KEYUP:
+            if event.type== pygame.KEYUP and start==0:
                 if event.key== pygame.K_LEFT:
                     changeX-=1
                 if event.key== pygame.K_RIGHT:
