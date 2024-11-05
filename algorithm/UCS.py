@@ -280,6 +280,11 @@ class UniformCostSearch:
                 if self.game_grid[i][j] == ' ':
                     self.game_grid[i] = self.game_grid[i][:j] + \
                         '#' + self.game_grid[i][j+1:]
+        # fill ' ' at the end to max length
+        max_length = max([len(row) for row in self.game_grid])
+        for i in range(len(self.game_grid)):
+            self.game_grid[i] = self.game_grid[i] + '#' * \
+                (max_length - len(self.game_grid[i]))
         print(self.game_grid)
         return self.stone_weights, self.game_grid
 
@@ -325,18 +330,22 @@ class UniformCostSearch:
 
 
 def main():
-    # input_filename = 'maze\\input-10.txt'
-    # output_filename = 'ucs\\output-10.txt'
+    # input_filename = 'maze\\input-06.txt'
+    # output_filename = 'ucs\\output-06.txt'
+    # solver = UniformCostSearch(input_filename, output_filename)
+    # solver.solve()
     if len(sys.argv) >= 2:
         input_filename = sys.argv[1]
     if len(sys.argv) >= 3:
         output_filename = sys.argv[2]
-    for i in range(1, 11):
-        input_filename = f'maze\\input-{i}.txt'
-        output_filename = f'ucs\\output-{i}.txt'
-        solver = UniformCostSearch(input_filename, output_filename)
-        solver.solve()
-
-
+    # for i in range(1, 10):
+    #     input_filename = f'maze\\input-0{i}.txt'
+    #     output_filename = f'new_ucs\\output-0{i}.txt'
+    #     solver = UniformCostSearch(input_filename, output_filename)
+    #     solver.solve()
+    input_filename = 'maze\\input-10.txt'
+    output_filename = 'new_ucs\\output-10.txt'
+    solver = UniformCostSearch(input_filename, output_filename)
+    solver.solve()
 if __name__ == "__main__":
     main()
