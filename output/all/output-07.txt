@@ -1,0 +1,10 @@
+A*
+Steps: 36, Weight: 503, Node: 61112, Time (ms): 1827.35, Memory (MB): 80.84
+luuuuruLLLulDDrddddrrrrUruLLurUdllDD
+BFS
+Steps: 24, Weight: 625, Node: 547901, Time (ms): 14743.64, Memory (MB): 667.14
+rUUruLUdLuuLLLulDDrrrDDD
+DFS
+Steps: 30, Weight: 625, Node: 34067, Time (ms): 158.99, Memory (MB): 48.56
+rUruLLLLLrrrrrulUluulDDDDDlllU
+No solution found.
