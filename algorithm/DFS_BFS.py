@@ -123,6 +123,9 @@ class SokobanSolver:
     def dfs_search(self):
         max_depth = 1
         while True:
+            if max_depth > 1000:
+                print("Max depth reached.")
+                return None
             result = self.dfs_with_depth_limit(max_depth)
             if result:
                 return result
@@ -221,17 +224,23 @@ def read_input(filename):
 
 
 if __name__ == "__main__":
-    algo_name = sys.argv[3] if len(sys.argv) >= 4 else 'DFS'
-    input_filename = sys.argv[1]
-    output_filename = sys.argv[2]
-    
-    stone_weights, maze = read_input(input_filename)
-    solver = SokobanSolver(stone_weights, maze)
-    result = solver.solve(algo_name=algo_name)
-    if result:
-        num_steps, total_weight, nodes_generated, time_taken, memory_used, path = result
-        algorithm_name = "BFS" if algo_name == 'BFS' else "DFS"
-        solver.write_output(output_filename, algorithm_name, num_steps, total_weight, nodes_generated, time_taken, memory_used, path)
-    else:
-        with open(output_filename, 'w') as f:
-            f.write("No solution found.\n")
+    algo_name = 'DFS'
+    input_dir = 'maze'
+    output_dir = 'output/' + f'{algo_name.lower()}'
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    for input_file in os.listdir(input_dir):
+        print(f"Solving {input_file}...")
+        input_filename = os.path.join(input_dir, input_file)
+        output_filename = os.path.join(output_dir, f'output-{input_file.strip('.txt')[-2:]}.txt')
+        stone_weights, maze = read_input(input_filename)
+        solver = SokobanSolver(stone_weights, maze)
+        result = solver.solve(algo_name=algo_name)
+        if result:
+            num_steps, total_weight, nodes_generated, time_taken, memory_used, path = result
+            solver.write_output(output_filename, algo_name, num_steps, total_weight, nodes_generated, time_taken, memory_used, path)
+        else:
+            with open(output_filename, 'w') as f:
+                f.write("No solution found.\n")
