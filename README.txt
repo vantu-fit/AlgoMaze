@@ -23,6 +23,10 @@ Installation:
         .\env\Scripts\activate
     - On MacOS/Linux:
         source env/bin/activate
+    Or using conda:
+-   conda create -n myenv python=3.x
+    (Replace `myenv` with a name of your choice, and `3.x` with the required Python version (e.g., `3.8`))
+-   conda activate myenv
 3. Install dependencies:
     pip install -r requirements.txt
 
