@@ -329,7 +329,8 @@ def calPosMode(x):
     k=150+x*100
     return (k,450)
 
-algos=['DFS','BFS','UCS',"A*"]
+# algos=['DFS','BFS','UCS',"A*"]
+algos = ['A*','BFS','DFS','UCS']
 ModeButtons=[Button(image=None,Himage=None,pos=calPosMode(i),font=fontLevel,selected=(i==0),
                       text_input=algos[i],base_color="White", hovering_color="Green",cSelected='Orange') for i in range(4) ]
 

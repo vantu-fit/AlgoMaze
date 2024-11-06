@@ -123,7 +123,7 @@ class SokobanSolver:
     def dfs_search(self):
         max_depth = 1
         while True:
-            if max_depth > 1000:
+            if max_depth > 10000:
                 print("Max depth reached.")
                 return None
             result = self.dfs_with_depth_limit(max_depth)
@@ -213,6 +213,12 @@ class SokobanSolver:
             f.write(f"Steps: {steps}, Weight: {total_weight}, Node: {nodes_generated}, Time (ms): {time_taken:.2f}, Memory (MB): {memory_used:.2f}\n")
             f.write(f"{path}\n")
 
+    def write_all(self, filename, algo_name, steps, total_weight, nodes_generated, time_taken, memory_used, path):
+        with open(filename, 'a') as f:
+            f.write(f"{algo_name}\n")
+            f.write(f"Steps: {steps}, Weight: {total_weight}, Node: {nodes_generated}, Time (ms): {time_taken:.2f}, Memory (MB): {memory_used:.2f}\n")
+            f.write(f"{path}\n")
+
 def read_input(filename):
     with open(filename, 'r') as f:
         lines = f.readlines()
@@ -234,13 +240,14 @@ if __name__ == "__main__":
     for input_file in os.listdir(input_dir):
         print(f"Solving {input_file}...")
         input_filename = os.path.join(input_dir, input_file)
-        output_filename = os.path.join(output_dir, f'output-{input_file.strip('.txt')[-2:]}.txt')
+        output_filename = os.path.join(output_dir, f"output-{input_file.strip('.txt')[-2:]}.txt")
         stone_weights, maze = read_input(input_filename)
         solver = SokobanSolver(stone_weights, maze)
         result = solver.solve(algo_name=algo_name)
         if result:
             num_steps, total_weight, nodes_generated, time_taken, memory_used, path = result
             solver.write_output(output_filename, algo_name, num_steps, total_weight, nodes_generated, time_taken, memory_used, path)
+            solver.write_all(f"output/all/output-{input_file.strip('.txt')[-2:]}.txt", algo_name, num_steps, total_weight, nodes_generated, time_taken, memory_used, path)
         else:
             with open(output_filename, 'w') as f:
                 f.write("No solution found.\n")
