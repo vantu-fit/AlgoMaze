@@ -123,7 +123,7 @@ class SokobanSolver:
     def dfs_search(self):
         max_depth = 1
         while True:
-            if max_depth > 1000:
+            if max_depth > 10000:
                 print("Max depth reached.")
                 return None
             result = self.dfs_with_depth_limit(max_depth)
@@ -234,7 +234,7 @@ if __name__ == "__main__":
     for input_file in os.listdir(input_dir):
         print(f"Solving {input_file}...")
         input_filename = os.path.join(input_dir, input_file)
-        output_filename = os.path.join(output_dir, f'output-{input_file.strip('.txt')[-2:]}.txt')
+        output_filename = os.path.join(output_dir, f"output-{input_file.strip('.txt')[-2:]}.txt")
         stone_weights, maze = read_input(input_filename)
         solver = SokobanSolver(stone_weights, maze)
         result = solver.solve(algo_name=algo_name)

@@ -1,1 +1,3 @@
-No solution found.
+A*
+Steps: 39, Weight: 361, Node: 4154, Time (ms): 135.43, Memory (MB): 33.93
+uuRRuuurrdddLLuRdrUdllLdlluRRRurrUrRurD

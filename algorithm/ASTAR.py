@@ -215,7 +215,7 @@ if __name__ == "__main__":
     for input_filename in os.listdir(input_dir):
         print(f"Solving {input_filename}...")
         input_filename = os.path.join(input_dir, input_filename)
-        output_filename = os.path.join(output_dir, f'output-{input_filename.strip('.txt')[-2:]}.txt')
+        output_filename = os.path.join(output_dir, f"output-{input_filename.strip('.txt')[-2:]}.txt")
         weights, grid = read_input(input_filename)
         solver = SokobanSolver(weights, grid)
         result = solver.solve()
@@ -230,4 +230,3 @@ if __name__ == "__main__":
     print(f"Total time taken: {end_time - start_time:.2f}s")
 
     print("Done!")
-
