@@ -12,7 +12,7 @@ RED = (0, 0, 0)
 game_height,game_width=0,0
 # CHARACTER_COLOR = pygame.image.load("./img/walle.png")
 PIT_COLOR = (0,0,225)
-font=pygame.font.Font('./font/Audiowide-Regular.ttf',15)
+font=pygame.font.Font('./font/Audiowide-Regular.ttf',13)
 # ROCK_COLOR=(0,225,0)
 
 active_maze=None
@@ -249,10 +249,12 @@ def load_maze(filename):
 def update_stats(): #update steps and weight
     global steps,stat_weight
     statfont=pygame.font.Font('./font/Audiowide-Regular.ttf',20)
-    text_steps=statfont.render(f"Steps: {steps}",True,'Orange')
-    text_weight=statfont.render(f"Total weight: {stat_weight}",True,'Orange')
+    text_steps=statfont.render(f"Steps: {steps}",True,'Cyan')
+    text_weight=statfont.render(f"Total weight: {stat_weight}",True,'Cyan')
+    text_cost=statfont.render(f"Total Cost: {steps+stat_weight}",True,'Cyan')
     org_draw(text_steps,50,500)
-    org_draw(text_weight,50,530)
+    org_draw(text_weight,200,500)
+    org_draw(text_cost,50,530)
 
 def update_size():
     global TILE_X,TILE_Y,screen_height,screen_width,screen_height,menu_bar_height,menu_bar_width,screen
@@ -428,7 +430,7 @@ def startTimer():
     # Render text
     time_str = f"{output[algos[mode]][level]['time']}"
     # text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-    text=statfont.render(time_str,True,'Orange')
+    text=statfont.render(time_str,True,'Cyan')
     # screen.blit(text, text_rect)
     org_draw(text,50,560)
     
@@ -444,8 +446,8 @@ def runMaze():
             return
         d=None
         # print(c)
-        steps=i
-        stat_weight+=1
+        steps=i+1
+        # stat_weight+=1
         if c=='u': d=3
         if c=='r': d=0
         if c=='l': d=1
