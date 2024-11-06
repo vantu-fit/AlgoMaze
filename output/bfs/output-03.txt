@@ -1,1 +1,3 @@
-No solution found.
+BFS
+Steps: 39, Weight: 361, Node: 7671, Time (ms): 110.10, Memory (MB): 27.25
+uuRRuuurrdddLLuRdrUdllLdlluRRRurrUrRurD

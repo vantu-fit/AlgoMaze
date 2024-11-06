@@ -170,6 +170,12 @@ class SokobanSolver:
             return steps, total_weight, nodes_generated, time_taken, memory_used, solution
         else:
             return None
+        
+    def write_all(self, filename, algo_name, steps, total_weight, nodes_generated, time_taken, memory_used, path):
+        with open(filename, 'a') as f:
+            f.write(f"{algo_name}\n")
+            f.write(f"Steps: {steps}, Weight: {total_weight}, Node: {nodes_generated}, Time (ms): {time_taken:.2f}, Memory (MB): {memory_used:.2f}\n")
+            f.write(f"{path}\n")
 
 
 def read_input(filename):
@@ -183,23 +189,6 @@ def read_input(filename):
 
 
 def main():
-    # input_filename = 'input.txt'
-    # output_filename = 'ASTART_output.txt'
-    # if len(sys.argv) >= 2:
-    #     input_filename = sys.argv[1]
-    # if len(sys.argv) >= 3:
-    #     output_filename = sys.argv[2]
-
-    # weights, grid = read_input(input_filename)
-    # solver = SokobanSolver(weights, grid)
-    # result = solver.solve()
-    # if result:
-    #     steps, total_weight, nodes_generated, time_taken, memory_used, solution = result
-    #     algorithm_name = "A*"
-    #     solver.write_output(output_filename, algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution)
-    # else:
-    #     with open(output_filename, 'w') as f:
-    #         f.write("No solution found.\n")
     input_dir = 'maze'
     # output_dir = f'algorithm/logs/output_{datetime.now().strftime("%Y%m%d%H%M%S")}'
     output_dir = 'output/ucs'
@@ -221,6 +210,7 @@ def main():
             algorithm_name = "UCS"
             solver.write_output(output_filename, algorithm_name, steps,
                                 total_weight, nodes_generated, time_taken, memory_used, solution)
+            solver.write_all(f"output/all/output-{input_filename.strip('.txt')[-2:]}.txt", algorithm_name, steps, total_weight, nodes_generated, time_taken, memory_used, solution)
         else:
             with open(output_filename, 'w') as f:
                 f.write("No solution found.\n")

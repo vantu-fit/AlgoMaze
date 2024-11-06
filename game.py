@@ -329,7 +329,8 @@ def calPosMode(x):
     k=150+x*100
     return (k,450)
 
-algos=['DFS','BFS','UCS',"A*"]
+# algos=['DFS','BFS','UCS',"A*"]
+algos = ['A*','BFS','DFS','UCS']
 ModeButtons=[Button(image=None,Himage=None,pos=calPosMode(i),font=fontLevel,selected=(i==0),
                       text_input=algos[i],base_color="White", hovering_color="Green",cSelected='Orange') for i in range(4) ]
 
@@ -393,14 +394,16 @@ def readOutput():
     global output
     files=os.listdir('./output/all')
     for i in algos:
-        output[i]=[]
-    for file in files:
+        output[i]=[[] for _ in range(10)]
+    for j,file in enumerate(files):
         lines=None
         with open("./output/all/"+file,'r') as f:
             lines=f.readlines()
         lines= [a.strip("\n") for a in lines]
         for i in range(0,len(lines),3):
-            output[lines[i]].append(lines[i+2].lower())
+            if (lines[i]=='No solution found.'):
+                continue
+            output[lines[i]][j]=lines[i+2].lower()
 
 def reset_stopwatch():
     global start_time, elapsed_time
@@ -431,6 +434,7 @@ def runMaze():
     global output,me,steps,stat_weight
     res=output[algos[mode]][level]
     steps=0
+    stat_weight=0
     # print(res)
     for i,c in enumerate(res):
         if (start==0):

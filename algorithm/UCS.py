@@ -335,8 +335,8 @@ def main():
     # if len(sys.argv) >= 3:
     #     output_filename = sys.argv[2]
     for i in range(1, 10):
-        input_filename = f'maze\\input-0{i}.txt'
-        output_filename = f'output\\ucs\\output-0{i}.txt'
+        input_filename = f'input.txt'
+        output_filename = f'output.txt'
         solver = UniformCostSearch(input_filename, output_filename)
         solver.solve()
 
