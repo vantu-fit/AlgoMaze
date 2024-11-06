@@ -391,16 +391,18 @@ elapsed_time = 0
 output=dict()
 def readOutput():
     global output
-    files=os.listdir('./output_4')
+    files=os.listdir('./output/all')
     for i in algos:
-        output[i]=[]
-    for file in files:
+        output[i]=[[] for _ in range(10)]
+    for j,file in enumerate(files):
         lines=None
-        with open("./output_4/"+file,'r') as f:
+        with open("./output/all/"+file,'r') as f:
             lines=f.readlines()
         lines= [a.strip("\n") for a in lines]
         for i in range(0,len(lines),3):
-            output[lines[i]].append(lines[i+2].lower())
+            if (lines[i]=='No solution found.'):
+                continue
+            output[lines[i]][j]=lines[i+2].lower()
 
 def reset_stopwatch():
     global start_time, elapsed_time
@@ -431,6 +433,7 @@ def runMaze():
     global output,me,steps,stat_weight
     res=output[algos[mode]][level]
     steps=0
+    stat_weight=0
     # print(res)
     for i,c in enumerate(res):
         if (start==0):
