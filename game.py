@@ -403,7 +403,9 @@ def readOutput():
         for i in range(0,len(lines),3):
             if (lines[i]=='No solution found.'):
                 continue
-            output[lines[i]][j]=lines[i+2].lower()
+            a= [b for b in lines[i+1].split(',') if 'Time' in b]
+            output[lines[i]][j]={'time':a[0],
+                                 'move':lines[i+2].lower()}
 
 def reset_stopwatch():
     global start_time, elapsed_time
@@ -423,7 +425,7 @@ def startTimer():
     milliseconds = int((elapsed_time % 1000)/10)
 
     # Render text
-    time_str = f"Time: {minutes:02}:{seconds:02}:{milliseconds:02}"
+    time_str = f"{output[algos[mode]][level]['time']}"
     # text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
     text=statfont.render(time_str,True,'Orange')
     # screen.blit(text, text_rect)
@@ -432,7 +434,7 @@ def startTimer():
 stat_weight,steps=0,0
 def runMaze():
     global output,me,steps,stat_weight
-    res=output[algos[mode]][level]
+    res=output[algos[mode]][level]['move']
     steps=0
     stat_weight=0
     # print(res)
