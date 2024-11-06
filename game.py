@@ -391,12 +391,12 @@ elapsed_time = 0
 output=dict()
 def readOutput():
     global output
-    files=os.listdir('./output/a_star')
+    files=os.listdir('./output/all')
     for i in algos:
         output[i]=[]
     for file in files:
         lines=None
-        with open("./output/a_star/"+file,'r') as f:
+        with open("./output/all/"+file,'r') as f:
             lines=f.readlines()
         lines= [a.strip("\n") for a in lines]
         for i in range(0,len(lines),3):
