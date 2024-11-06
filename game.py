@@ -403,8 +403,9 @@ def readOutput():
         for i in range(0,len(lines),3):
             if (lines[i]=='No solution found.'):
                 continue
-            a= [b for b in lines[i+1].split(',') if 'Time' in b]
-            output[lines[i]][j]={'time':a[0],
+            a= [b for b in lines[i+1].split(',') if 'Time' in b or 'Memory' in b]
+
+            output[lines[i]][j]={'time':a[0]+"  "+ a[1],
                                  'move':lines[i+2].lower()}
 
 def reset_stopwatch():
