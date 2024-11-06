@@ -1,3 +1,3 @@
 DFS
-Steps: 63, Weight: 643, Node: 74502, Time (ms): 936.08, Memory (MB): 107.14
+Steps: 63, Weight: 643, Node: 74502, Time (ms): 694.98, Memory (MB): 125.85
 lddLLdlluRlulururRurrrDulDLLLrrrDDldLdlluulurUUdldrdrDrrurrUldD

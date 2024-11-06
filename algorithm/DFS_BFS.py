@@ -213,6 +213,12 @@ class SokobanSolver:
             f.write(f"Steps: {steps}, Weight: {total_weight}, Node: {nodes_generated}, Time (ms): {time_taken:.2f}, Memory (MB): {memory_used:.2f}\n")
             f.write(f"{path}\n")
 
+    def write_all(self, filename, algo_name, steps, total_weight, nodes_generated, time_taken, memory_used, path):
+        with open(filename, 'a') as f:
+            f.write(f"{algo_name}\n")
+            f.write(f"Steps: {steps}, Weight: {total_weight}, Node: {nodes_generated}, Time (ms): {time_taken:.2f}, Memory (MB): {memory_used:.2f}\n")
+            f.write(f"{path}\n")
+
 def read_input(filename):
     with open(filename, 'r') as f:
         lines = f.readlines()
@@ -241,6 +247,7 @@ if __name__ == "__main__":
         if result:
             num_steps, total_weight, nodes_generated, time_taken, memory_used, path = result
             solver.write_output(output_filename, algo_name, num_steps, total_weight, nodes_generated, time_taken, memory_used, path)
+            solver.write_all(f"output/all/output-{input_file.strip('.txt')[-2:]}.txt", algo_name, num_steps, total_weight, nodes_generated, time_taken, memory_used, path)
         else:
             with open(output_filename, 'w') as f:
                 f.write("No solution found.\n")
